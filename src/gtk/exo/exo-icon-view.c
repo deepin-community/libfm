@@ -2,6 +2,7 @@
  * Copyright (c) 2008       Jannis Pohlmann <jannis@xfce.org>
  * Copyright (c) 2004-2006  os-cillation e.K.
  * Copyright (c) 2002,2004  Anders Carlsson <andersca@gnu.org>
+ * Copyright 2024 Ingo Brückl
  *
  * Written by Benedikt Meurer <benny@xfce.org>.
  *
@@ -128,6 +129,7 @@ enum
   PROP_REORDERABLE,
   PROP_SINGLE_CLICK,
   PROP_SINGLE_CLICK_TIMEOUT,
+  PROP_MIDDLE_CLICK,
   PROP_ENABLE_SEARCH,
   PROP_SEARCH_COLUMN,
   /* For scrollable interface */
@@ -633,6 +635,9 @@ struct _ExoIconViewPrivate
   guint                         single_click_timeout_id;
   guint                         single_click_timeout_state;
 
+  /* Middle-click support */
+  guint                         middle_click : 1;
+
   /* Interactive search support */
   guint                         enable_search : 1;
   guint                         search_imcontext_changed : 1;
@@ -995,6 +1000,21 @@ exo_icon_view_class_init (ExoIconViewClass *klass)
                                                       _("The amount of time after which the item under the mouse cursor will be selected automatically in single click mode"),
                                                       0, G_MAXUINT, 0,
                                                       EXO_PARAM_READWRITE));
+
+  /**
+   * ExoIconView:middle-click:
+   *
+   * Determines whether items can be activated by single middle-clicks.
+   *
+   * Since: 1.4.0
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_MIDDLE_CLICK,
+                                   g_param_spec_boolean ("middle-click",
+                                                         _("Middle Click"),
+                                                         _("Whether the items in the view can be activated with middle clicks"),
+                                                         FALSE,
+                                                         EXO_PARAM_READWRITE));
 
   /**
    * ExoIconView:spacing:
@@ -1424,6 +1444,10 @@ exo_icon_view_get_property (GObject      *object,
       g_value_set_uint (value, priv->single_click_timeout);
       break;
 
+    case PROP_MIDDLE_CLICK:
+      g_value_set_boolean (value, priv->middle_click);
+      break;
+
     case PROP_SPACING:
       g_value_set_int (value, priv->spacing);
       break;
@@ -1521,6 +1545,10 @@ exo_icon_view_set_property (GObject      *object,
       exo_icon_view_set_single_click_timeout (icon_view, g_value_get_uint (value));
       break;
 
+    case PROP_MIDDLE_CLICK:
+      exo_icon_view_set_middle_click (icon_view, g_value_get_boolean (value));
+      break;
+
     case PROP_SPACING:
       exo_icon_view_set_spacing (icon_view, g_value_get_int (value));
       break;
@@ -1601,6 +1629,9 @@ exo_icon_view_realize (GtkWidget *widget)
   attributes.height = MAX (priv->height, allocation.height);
   attributes.event_mask = GDK_EXPOSURE_MASK
                         | GDK_SCROLL_MASK
+#if GTK_CHECK_VERSION(3, 4, 0)
+                        | GDK_SMOOTH_SCROLL_MASK
+#endif
                         | GDK_POINTER_MOTION_MASK
                         | GDK_BUTTON_PRESS_MASK
                         | GDK_BUTTON_RELEASE_MASK
@@ -1878,6 +1909,16 @@ exo_icon_view_expose_event (GtkWidget      *widget,
 
   if (!gtk_cairo_should_draw_window (cr, priv->bin_window))
     return FALSE;
+
+  /* draw a background according to the css theme */
+  style = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (style);
+  gtk_style_context_add_class (style, GTK_STYLE_CLASS_VIEW);
+  gtk_render_background (style, cr,
+                         0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
+  gtk_style_context_restore (style);
 #endif
 
   /* don't handle expose if the layout isn't done yet; the layout
@@ -1978,10 +2019,8 @@ exo_icon_view_expose_event (GtkWidget      *widget,
 #endif
     }
 
+#if !GTK_CHECK_VERSION(3, 0, 0)
   if (G_UNLIKELY (dest_item != NULL || priv->doing_rubberband))
-#if GTK_CHECK_VERSION(3, 0, 0)
-      style = gtk_widget_get_style_context (widget);
-#else
       style = gtk_widget_get_style (widget);
 #endif
 
@@ -2629,7 +2668,8 @@ exo_icon_view_button_press_event (GtkWidget      *widget,
             exo_icon_view_start_rubberbanding (icon_view, event->x, event->y);
         }
     }
-  else if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
+  else if ((event->button == 1 && event->type == GDK_2BUTTON_PRESS) ||
+           (icon_view->priv->middle_click && event->button == 2 && event->type == GDK_BUTTON_PRESS))
     {
       /* ignore double-click events in single-click mode */
       if (G_LIKELY (!icon_view->priv->single_click))
@@ -2682,7 +2722,7 @@ exo_icon_view_button_press_event (GtkWidget      *widget,
   /* release reference that was taken above */
   g_object_unref(widget);
 
-  return event->button == 1;
+  return event->button == (icon_view->priv->middle_click ? 2 : 1);
 }
 
 
@@ -2739,7 +2779,7 @@ exo_icon_view_scroll_event (GtkWidget      *widget,
 {
   GtkAdjustment *adjustment;
   ExoIconView   *icon_view = EXO_ICON_VIEW (widget);
-  gdouble        delta;
+  gdouble        delta, delta_x;
   gdouble        value;
 
   /* we don't care for scroll events in "rows" layout mode, as
@@ -2751,7 +2791,11 @@ exo_icon_view_scroll_event (GtkWidget      *widget,
   /* also, we don't care for anything but Up/Down, as
    * everything else will be handled by GtkScrolledWindow.
    */
-  if (event->direction != GDK_SCROLL_UP && event->direction != GDK_SCROLL_DOWN)
+  if (event->direction != GDK_SCROLL_UP && event->direction != GDK_SCROLL_DOWN
+#if GTK_CHECK_VERSION(3, 4, 0)
+   && event->direction != GDK_SCROLL_SMOOTH
+#endif
+     )
     return FALSE;
 
   /* we also don't care for scroll events with Shift/Ctrl/Alt pressed */
@@ -2764,6 +2808,11 @@ exo_icon_view_scroll_event (GtkWidget      *widget,
   /* determine the scroll delta */
   delta = pow (gtk_adjustment_get_page_size(adjustment), 2.0 / 3.0);
   delta = (event->direction == GDK_SCROLL_UP) ? -delta : delta;
+#if GTK_CHECK_VERSION(3, 4, 0)
+  if (gdk_event_get_scroll_deltas((GdkEvent *) event, &delta_x, NULL))
+    /* it was smooth scrolling - try to approach the usual scrolling speed */
+    delta = delta_x * 33.3;
+#endif
 
   /* apply the new adjustment value */
   value = CLAMP (gtk_adjustment_get_value(adjustment) + delta, gtk_adjustment_get_lower(adjustment), gtk_adjustment_get_upper(adjustment) - gtk_adjustment_get_page_size(adjustment));
@@ -2819,7 +2868,7 @@ exo_icon_view_key_press_event (GtkWidget   *widget,
   /* allocate a new event to forward */
   new_event = gdk_event_copy ((GdkEvent *) event);
   g_object_unref (G_OBJECT (new_event->key.window));
-  new_event->key.window = g_object_ref (G_OBJECT (gtk_widget_get_window (icon_view->priv->search_entry)));
+  new_event->key.window = GDK_WINDOW(g_object_ref (G_OBJECT (gtk_widget_get_window (icon_view->priv->search_entry))));
 
   /* send the event to the search entry. If the "preedit-changed" signal is
    * emitted during this event, priv->search_imcontext_changed will be set.
@@ -3414,7 +3463,9 @@ exo_icon_view_adjustment_changed (GtkAdjustment *adjustment,
       if (G_UNLIKELY (icon_view->priv->doing_rubberband))
         exo_icon_view_update_rubberband (GTK_WIDGET (icon_view));
 
+#if !GTK_CHECK_VERSION(3, 22, 0)
       gdk_window_process_updates (icon_view->priv->bin_window, TRUE);
+#endif
     }
 }
 
@@ -8358,6 +8409,59 @@ static void
 exo_icon_view_single_click_timeout_destroy (gpointer user_data)
 {
   EXO_ICON_VIEW (user_data)->priv->single_click_timeout_id = 0;
+}
+
+
+
+/*----------------------*
+ * Middle-click support *
+ *----------------------*/
+
+/**
+ * exo_icon_view_get_middle_click:
+ * @icon_view : a #ExoIconView.
+ *
+ * Returns %TRUE if @icon_view is currently in middle click mode,
+ * else %FALSE will be returned.
+ *
+ * Return value: whether @icon_view is currently in middle click mode.
+ *
+ * Since: 1.4.0
+ **/
+gboolean
+exo_icon_view_get_middle_click (const ExoIconView *icon_view)
+{
+  g_return_val_if_fail (EXO_IS_ICON_VIEW (icon_view), FALSE);
+  return icon_view->priv->middle_click;
+}
+
+
+
+/**
+ * exo_icon_view_set_middle_click:
+ * @icon_view    : a #ExoIconView.
+ * @middle_click : %TRUE for middle click, %FALSE for double click mode.
+ *
+ * If @middle_click is %TRUE, @icon_view will be in middle click mode
+ * afterwards, else @icon_view will be in double click mode.
+ *
+ * Since: 1.4.0
+ **/
+void
+exo_icon_view_set_middle_click (ExoIconView *icon_view,
+                                gboolean     middle_click)
+{
+  g_return_if_fail (EXO_IS_ICON_VIEW (icon_view));
+
+  /* normalize the value */
+  middle_click = !!middle_click;
+
+  /* check if we have a new setting here */
+  if (icon_view->priv->middle_click != middle_click)
+    {
+      icon_view->priv->middle_click = middle_click;
+      g_object_notify (G_OBJECT (icon_view), "middle-click");
+    }
 }
 
 

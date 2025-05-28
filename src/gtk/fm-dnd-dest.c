@@ -3,6 +3,7 @@
  *
  *      Copyright 2009 PCMan <pcman.tw@gmail.com>
  *      Copyright 2012-2015 Andriy Grytsenko (LStranger) <andrej@rep.kiev.ua>
+ *      Copyright 2024-2025 Ingo Brückl
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -458,7 +459,7 @@ static GdkDragAction _ask_action_on_drop(GtkWidget *widget,
             gtk_action_set_sensitive(act, FALSE);
         }
     }
-    ri.menu = g_object_ref(gtk_ui_manager_get_widget(ui, "/popup"));
+    ri.menu = GTK_MENU(g_object_ref(gtk_ui_manager_get_widget(ui, "/popup")));
     g_signal_connect(ri.menu, "selection-done", G_CALLBACK(gtk_widget_destroy), NULL);
     unmap_handler = g_signal_connect(ri.menu, "unmap",
                                      G_CALLBACK(run_unmap_handler), &ri);
@@ -712,6 +713,7 @@ gboolean _on_drag_data_received(FmDndDest* dd, GdkDragContext *drag_context,
     }
     else if(info == FM_DND_DEST_TARGET_XDS) /* X direct save */
     {
+        gboolean success = FALSE;
         if(format == 8 && length == 1 && data[0] == 'F')
         {
             GdkWindow *source_window;
@@ -722,9 +724,9 @@ gboolean _on_drag_data_received(FmDndDest* dd, GdkDragContext *drag_context,
         }
         else if(format == 8 && length == 1 && data[0] == 'S')
         {
-            /* XDS succeeds */
+            success = TRUE;
         }
-        gtk_drag_finish(drag_context, TRUE, FALSE, time);
+        gtk_drag_finish(drag_context, success, gdk_drag_context_get_selected_action(drag_context) == GDK_ACTION_MOVE, time);
         return TRUE;
     }
 
@@ -860,12 +862,14 @@ gboolean _on_drag_drop(FmDndDest* dd, GdkDragContext *drag_context,
                 FmFileInfo* dest = fm_dnd_dest_get_dest_file(dd);
                 if( dest && fm_file_info_is_dir(dest) )
                 {
+                    data = g_realloc(data, len + 1);
+                    data[len] = 0;
                     FmPath* path = fm_path_new_child(fm_file_info_get_path(dest), (gchar*)data);
                     char* uri = fm_path_to_uri(path);
                     /* setup the property */
                     gdk_property_change(source_window, target,
                                        text_atom, 8, GDK_PROP_MODE_REPLACE, (const guchar *)uri,
-                                       strlen(uri) + 1);
+                                       strlen(uri));
                     fm_path_unref(path);
                     g_free(uri);
                 }
@@ -901,6 +905,7 @@ gboolean _on_drag_drop(FmDndDest* dd, GdkDragContext *drag_context,
                 ret = FALSE;
         }
         gtk_drag_finish(drag_context, ret, FALSE, time);
+        clear_src_cache(dd);
     }
     return ret;
 }
@@ -939,6 +944,10 @@ GdkDragAction fm_dnd_dest_get_default_action(FmDndDest* dd,
     FmPath* dest_path;
     int can_drop;
 
+    /* this is XDirectSave */
+    if(target == dest_target_atom[FM_DND_DEST_TARGET_XDS])
+        return gdk_drag_context_get_suggested_action(drag_context);
+
     if(!dest || !(dest_path = fm_file_info_get_path(dest)))
         /* query drag sources in any case */
         goto query_sources;
@@ -967,10 +976,6 @@ GdkDragAction fm_dnd_dest_get_default_action(FmDndDest* dd,
         }
         return GDK_ACTION_COPY;
     }
-
-    /* this is XDirectSave */
-    if(target == dest_target_atom[FM_DND_DEST_TARGET_XDS])
-        return GDK_ACTION_COPY;
 
     /* we have no valid data, query it now */
     if(!dd->src_files || dd->context != drag_context)

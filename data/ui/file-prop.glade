@@ -6,9 +6,8 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">File Properties</property>
-    <property name="resizable">False</property>
     <property name="window_position">center-on-parent</property>
-    <property name="default_width">360</property>
+    <property name="default_width">600</property>
     <property name="type_hint">dialog</property>
     <property name="gravity">center</property>
     <signal name="response" handler="on_filePropertiesDlg_response" swapped="no"/>
@@ -906,7 +905,7 @@
         <col id="0" translatable="yes">None</col>
       </row>
       <row>
-        <col id="0" translatable="yes" context="It is a directory access bit - 'sticky' - where only owner can delete a file from it">Sticky</col>
+        <col id="0" translatable="yes" comments="this is a directory access bit - only owner can delete a file from it">Sticky</col>
       </row>
       <row>
         <col id="0" translatable="yes">Set GID</col>
@@ -929,7 +928,7 @@
         <col id="0" translatable="yes">None</col>
       </row>
       <row>
-        <col id="0" translatable="yes" context="this is a file access mode bit, also known as 'suid'">Set UID</col>
+        <col id="0" translatable="yes" comments="this is a file access mode bit - executable files run with permissions of owner">Set UID</col>
       </row>
       <row>
         <col id="0" translatable="yes">Set GID</col>
@@ -949,7 +948,7 @@
         <col id="0" translatable="yes">---</col>
       </row>
       <row>
-        <col id="0" translatable="yes" context="this is a file access mode - only owner can access the file, for others access is denied">Only owner</col>
+        <col id="0" translatable="yes" comments="this is a file access mode - only owner can access the file, for others access is denied">Only owner</col>
       </row>
       <row>
         <col id="0" translatable="yes">Only owner and group</col>
@@ -972,7 +971,7 @@
         <col id="0" translatable="yes">Nobody</col>
       </row>
       <row>
-        <col id="0" translatable="yes" context="this is a file access mode - only owner can access the file, for others access is denied">Only owner</col>
+        <col id="0" translatable="yes" comments="this is a file access mode - only owner can access the file, for others access is denied">Only owner</col>
       </row>
       <row>
         <col id="0" translatable="yes">Only owner and group</col>

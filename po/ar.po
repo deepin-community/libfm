@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libfm 1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-13 00:10+0300\n"
+"POT-Creation-Date: 2024-12-03 13:55+0100\n"
 "PO-Revision-Date: 2015-06-14 16:43+0000\n"
 "Last-Translator: صفا الفليج <safa1996alfulaij@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -53,20 +53,17 @@ msgstr "التّط_بيقات المثبّتة"
 msgid "<b>C_ommand line to execute:</b>"
 msgstr "<b>الأمر الّذي سيُ_نفّذ:</b>"
 
-#: ../data/ui/app-chooser.glade.h:5
-#: ../src/modules/gtk-fileprop-x-desktop.c:275
+#: ../data/ui/app-chooser.glade.h:5 ../src/modules/gtk-fileprop-x-desktop.c:275
 msgid "_Browse..."
 msgstr "ت_صفّح..."
 
 #. row 1: "Terminal" GtkCheckButton
-#: ../data/ui/app-chooser.glade.h:6
-#: ../src/modules/gtk-fileprop-x-desktop.c:294
+#: ../data/ui/app-chooser.glade.h:6 ../src/modules/gtk-fileprop-x-desktop.c:294
 msgid "_Execute in terminal emulator"
 msgstr "نفّ_ذ في محاكي الطّرفيّة"
 
 #. row 2: "X-KeepTerminal" GtkCheckButton
-#: ../data/ui/app-chooser.glade.h:7
-#: ../src/modules/gtk-fileprop-x-desktop.c:306
+#: ../data/ui/app-chooser.glade.h:7 ../src/modules/gtk-fileprop-x-desktop.c:306
 msgid "_Keep terminal window open after command execution"
 msgstr "أب_قِ نافذة الطّرفيّة مفتوحة بعد تنفيذ الأمر"
 
@@ -289,46 +286,55 @@ msgstr "---"
 msgid "None"
 msgstr "بلا"
 
-#: ../data/ui/file-prop.glade.h:32
-msgctxt ""
-"It is a directory access bit - 'sticky' - where only owner can delete a file "
-"from it"
+#. this is a directory access bit - only owner can delete a file from it
+#: ../data/ui/file-prop.glade.h:33
+#, fuzzy
+#| msgctxt ""
+#| "It is a directory access bit - 'sticky' - where only owner can delete a "
+#| "file from it"
+#| msgid "Sticky"
 msgid "Sticky"
 msgstr "لاصق"
 
-#: ../data/ui/file-prop.glade.h:33
+#: ../data/ui/file-prop.glade.h:34
 msgid "Set GID"
 msgstr "عيّن GID"
 
-#: ../data/ui/file-prop.glade.h:34
+#: ../data/ui/file-prop.glade.h:35
 msgid "Sticky & set GID"
 msgstr "لاصق وعيّن GID"
 
-#: ../data/ui/file-prop.glade.h:35
-msgctxt "this is a file access mode bit, also known as 'suid'"
+#. this is a file access mode bit - executable files run with permissions of owner
+#: ../data/ui/file-prop.glade.h:37
+#, fuzzy
+#| msgctxt "this is a file access mode bit, also known as 'suid'"
+#| msgid "Set UID"
 msgid "Set UID"
 msgstr "عيّن UID"
 
-#: ../data/ui/file-prop.glade.h:36
+#: ../data/ui/file-prop.glade.h:38
 msgid "Set UID & GID"
 msgstr "عيّن UID و GID"
 
-#: ../data/ui/file-prop.glade.h:37
-msgctxt ""
-"this is a file access mode - only owner can access the file, for others "
-"access is denied"
+#. this is a file access mode - only owner can access the file, for others access is denied
+#: ../data/ui/file-prop.glade.h:40
+#, fuzzy
+#| msgctxt ""
+#| "this is a file access mode - only owner can access the file, for others "
+#| "access is denied"
+#| msgid "Only owner"
 msgid "Only owner"
 msgstr "المالك فقط"
 
-#: ../data/ui/file-prop.glade.h:38
+#: ../data/ui/file-prop.glade.h:41
 msgid "Only owner and group"
 msgstr "المالك والمجموعة فقط"
 
-#: ../data/ui/file-prop.glade.h:39
+#: ../data/ui/file-prop.glade.h:42
 msgid "Anyone"
 msgstr "أيّ شخص"
 
-#: ../data/ui/file-prop.glade.h:40
+#: ../data/ui/file-prop.glade.h:43
 msgid "Nobody"
 msgstr "لا أحد"
 
@@ -543,43 +549,43 @@ msgstr "<b>الوقت المتبقّي:</b>"
 msgid "<b>Errors occurred:</b>"
 msgstr "<b>الأخطاء الّتي حدثت:</b>"
 
-#: ../src/base/fm-action.c:272
+#: ../src/base/fm-action.c:275
 #, fuzzy
 msgid "Empty value"
 msgstr "ملفّ فارغ"
 
-#: ../src/base/fm-action.c:280
+#: ../src/base/fm-action.c:283
 #, fuzzy
 msgid "Invalid selection"
 msgstr "الوجهة غير صالحة"
 
 #. ---- GFile implementation ----
-#: ../src/base/fm-action.c:807 ../src/job/fm-file-ops-job.c:271
+#: ../src/base/fm-action.c:811 ../src/job/fm-file-ops-job.c:271
 #: ../src/modules/vfs-menu.c:1176 ../src/modules/vfs-search.c:928
 msgid "Operation not supported"
 msgstr "العمليّة غير مدعومة"
 
-#: ../src/base/fm-file-launcher.c:87
+#: ../src/base/fm-file-launcher.c:88
 #, c-format
 msgid "Invalid desktop entry file: '%s'"
 msgstr "ملفّ مدخلة سطح المكتب غير صالح: '%s'"
 
-#: ../src/base/fm-file-launcher.c:253 ../src/base/fm-file-launcher.c:407
+#: ../src/base/fm-file-launcher.c:255 ../src/base/fm-file-launcher.c:409
 #, c-format
 msgid "Could not determine content type of file '%s' to launch it"
 msgstr "تعذّر تحديد نوع محتوى الملفّ '%s' لإطلاقه"
 
-#: ../src/base/fm-file-launcher.c:292
+#: ../src/base/fm-file-launcher.c:294
 #, c-format
 msgid "No default application is set to launch URIs %s://"
 msgstr "لا تطبيق افتراضيّ معيّن لإطلاق معرّفات URI ‏‎%s‎‎:‎‎/‎/‎"
 
-#: ../src/base/fm-file-launcher.c:360
+#: ../src/base/fm-file-launcher.c:362
 #, c-format
 msgid "Cannot set working directory to '%s': %s"
 msgstr "تعذّر تعيين دليل العمل إلى '%s': ‏%s"
 
-#: ../src/base/fm-file-launcher.c:454 ../src/base/fm-templates.c:1104
+#: ../src/base/fm-file-launcher.c:456 ../src/base/fm-templates.c:1104
 #, c-format
 msgid "No default application is set for MIME type %s"
 msgstr "لا تطبيق افتراضي معيّن لنوع MIME ‏%s هذا"
@@ -743,7 +749,12 @@ msgstr "fm_xml_file_to_data: خطأ في بيانات XML"
 msgid "Customize"
 msgstr "خصّص"
 
-#: ../src/gtk/fm-app-chooser-dlg.c:325
+#: ../src/gtk/fm-app-chooser-dlg.c:234
+#: ../src/modules/gtk-fileprop-x-desktop.c:72
+msgid "Executable files"
+msgstr "الملفّات التّنفيذيّة"
+
+#: ../src/gtk/fm-app-chooser-dlg.c:326
 #, c-format
 msgid "<b>Select an application to open \"%s\" files</b>"
 msgstr "<b>اختر تطبيقًا لفتح ملفّات \"%s\"</b>"
@@ -764,24 +775,24 @@ msgstr "يحمّل..."
 msgid "Shows tree of directories in sidebar"
 msgstr "يظهر شجرة الأدّلة في الشّريط الجانبيّ"
 
-#: ../src/gtk/fm-dnd-dest.c:412
+#: ../src/gtk/fm-dnd-dest.c:413
 msgid "_Cancel"
 msgstr "أل_غِ"
 
-#: ../src/gtk/fm-dnd-dest.c:413
+#: ../src/gtk/fm-dnd-dest.c:414
 msgid "C_opy Here"
 msgstr "ا_نسخ هنا"
 
-#: ../src/gtk/fm-dnd-dest.c:414
+#: ../src/gtk/fm-dnd-dest.c:415
 msgid "_Move Here"
 msgstr "ا_نقل هنا"
 
 #. Note to translators: Link in not noun but verb here
-#: ../src/gtk/fm-dnd-dest.c:416
+#: ../src/gtk/fm-dnd-dest.c:417
 msgid "_Link Here"
 msgstr "أو_صِل هنا"
 
-#: ../src/gtk/fm-dnd-dest.c:876
+#: ../src/gtk/fm-dnd-dest.c:880
 msgid "XDirectSave failed."
 msgstr "فشل XDirectSave."
 
@@ -842,11 +853,11 @@ msgstr "انقل إلى الم_هملات"
 msgid "Your bookmarks already have a bookmark for this folder."
 msgstr "في علاماتك علامة لهذا المجلّد بالفعل."
 
-#: ../src/gtk/fm-file-properties.c:368
+#: ../src/gtk/fm-file-properties.c:369
 msgid "Image files"
 msgstr "ملفات الصّور"
 
-#: ../src/gtk/fm-file-properties.c:494 ../src/gtk/fm-file-properties.c:503
+#: ../src/gtk/fm-file-properties.c:495 ../src/gtk/fm-file-properties.c:504
 msgid "byte"
 msgid_plural "bytes"
 msgstr[0] "لا بايتات"
@@ -856,34 +867,34 @@ msgstr[3] "بايتات"
 msgstr[4] "بايتًا"
 msgstr[5] "بايت"
 
-#: ../src/gtk/fm-file-properties.c:510
+#: ../src/gtk/fm-file-properties.c:511
 #, c-format
 msgid "scanning... %d"
 msgstr "يفحص... %d"
 
-#: ../src/gtk/fm-file-properties.c:588
+#: ../src/gtk/fm-file-properties.c:589
 msgid "Please enter a valid user name or numeric id."
 msgstr "فضلًا أدخل اسم مستخدم أو معرّف رقميّ صالح."
 
-#: ../src/gtk/fm-file-properties.c:618
+#: ../src/gtk/fm-file-properties.c:619
 msgid "Please enter a valid group name or numeric id."
 msgstr "فضلًا أدخل اسم مجموعة أو معرّف رقميّ صالح."
 
 #. FIXME: may special bits and exec flags still be messed up?
-#: ../src/gtk/fm-file-properties.c:827
+#: ../src/gtk/fm-file-properties.c:828
 msgid ""
 "Do you want to recursively apply these changes to all files and sub-folders?"
 msgstr "أتريد تطبيق هذه التّغييرات على كلّ الملفّات والمجلّدات الفرعيّة تكراريًّا؟"
 
-#: ../src/gtk/fm-file-properties.c:960
+#: ../src/gtk/fm-file-properties.c:961
 msgid "Hide or unhide the file"
 msgstr "أخفِ أو أظهر الملفّ"
 
-#: ../src/gtk/fm-file-properties.c:965
+#: ../src/gtk/fm-file-properties.c:966
 msgid "This file is hidden because its name starts with a dot ('.')."
 msgstr "هذا الملفّ مخفيّ لأنّ اسمه يبدأ بنقطة ('.')."
 
-#: ../src/gtk/fm-file-properties.c:969
+#: ../src/gtk/fm-file-properties.c:970
 msgid ""
 "Files on this system are hidden if their name starts with a dot ('.'). Hit "
 "<Ctrl+H> to toggle displaying hidden files."
@@ -891,23 +902,23 @@ msgstr ""
 "الملفّات في هذا النّظام مخفيّة لأنّ أسماؤها تبدأ بنقطة ('.'). اضغط <Ctrl+H> لقلب "
 "عرض الملفّات المخفيّة."
 
-#: ../src/gtk/fm-file-properties.c:1026
+#: ../src/gtk/fm-file-properties.c:1027
 msgid "scanning..."
 msgstr "يفحص..."
 
-#: ../src/gtk/fm-file-properties.c:1088
+#: ../src/gtk/fm-file-properties.c:1089
 msgid "<b>_Access content:</b>"
 msgstr "<b>النّفا_ذ للمحتوى:</b>"
 
-#: ../src/gtk/fm-file-properties.c:1239
+#: ../src/gtk/fm-file-properties.c:1240
 msgid "Files of different types"
 msgstr "ملفّات بأنوع مختلفة"
 
-#: ../src/gtk/fm-file-properties.c:1283
+#: ../src/gtk/fm-file-properties.c:1284
 msgid "<b>File:</b>"
 msgstr "<b>الملفّ:</b>"
 
-#: ../src/gtk/fm-file-properties.c:1349
+#: ../src/gtk/fm-file-properties.c:1350
 msgid "Multiple files"
 msgstr "عدّة ملفّات"
 
@@ -1144,60 +1155,60 @@ msgstr "التّطبيقات"
 msgid "Filesystem Root"
 msgstr "جذر نظام الملفّات"
 
-#: ../src/gtk/fm-places-view.c:131
+#: ../src/gtk/fm-places-view.c:132
 msgid "_Mount Volume"
 msgstr "_ضمّ الجزء"
 
-#: ../src/gtk/fm-places-view.c:132
+#: ../src/gtk/fm-places-view.c:133
 msgid "_Unmount Volume"
 msgstr "أل_غِ ضمّ الجزء"
 
-#: ../src/gtk/fm-places-view.c:133
+#: ../src/gtk/fm-places-view.c:134
 msgid "_Eject Removable Media"
 msgstr "أ_خرج الوسيط القابل للإزالة"
 
-#: ../src/gtk/fm-places-view.c:134
+#: ../src/gtk/fm-places-view.c:135
 msgid "_Format Volume"
 msgstr "_هيّئ الجزء"
 
-#: ../src/gtk/fm-places-view.c:150
+#: ../src/gtk/fm-places-view.c:151
 msgid "_Rename Bookmark Item"
 msgstr "أ_عد تسمية عنصر العلامات"
 
-#: ../src/gtk/fm-places-view.c:151
+#: ../src/gtk/fm-places-view.c:152
 msgid "Re_move from Bookmarks"
 msgstr "أ_زل من العلامات"
 
-#: ../src/gtk/fm-places-view.c:152
+#: ../src/gtk/fm-places-view.c:153
 msgid "Move Bookmark _Up"
 msgstr "انقل العلامة لأ_على"
 
-#: ../src/gtk/fm-places-view.c:153
+#: ../src/gtk/fm-places-view.c:154
 msgid "Move Bookmark _Down"
 msgstr "انقل العلامة لأ_سفل"
 
-#: ../src/gtk/fm-places-view.c:166 ../src/modules/gtk-menu-trash.c:87
+#: ../src/gtk/fm-places-view.c:167 ../src/modules/gtk-menu-trash.c:87
 #: ../src/modules/gtk-menu-trash.c:114
 msgid "_Empty Trash Can"
 msgstr "أ_فرغ سلّة المهملات"
 
-#: ../src/gtk/fm-places-view.c:533 ../src/gtk/fm-side-pane.c:645
+#: ../src/gtk/fm-places-view.c:536 ../src/gtk/fm-side-pane.c:645
 msgid "Shows list of common places, devices, and bookmarks in sidebar"
 msgstr "يظهر قائمة بالأماكن، والأجهزة والعلامات الشّائعة في الشّريط الجانبيّ"
 
-#: ../src/gtk/fm-places-view.c:1124
+#: ../src/gtk/fm-places-view.c:1127
 msgid "Rename Bookmark Item"
 msgstr "أعد تسمية عنصر العلامات"
 
-#: ../src/gtk/fm-places-view.c:1125
+#: ../src/gtk/fm-places-view.c:1128
 msgid "Enter a new name:"
 msgstr "أدخل اسمًا جديدًا:"
 
-#: ../src/gtk/fm-progress-dlg.c:135
+#: ../src/gtk/fm-progress-dlg.c:136
 msgid ": "
 msgstr ": "
 
-#: ../src/gtk/fm-progress-dlg.c:213 ../src/gtk/fm-progress-dlg.c:231
+#: ../src/gtk/fm-progress-dlg.c:214 ../src/gtk/fm-progress-dlg.c:232
 #, c-format
 msgid ""
 "Type: %s\n"
@@ -1208,7 +1219,7 @@ msgstr ""
 "الحجم: %s\n"
 "عُدّل في: %s"
 
-#: ../src/gtk/fm-progress-dlg.c:219 ../src/gtk/fm-progress-dlg.c:244
+#: ../src/gtk/fm-progress-dlg.c:220 ../src/gtk/fm-progress-dlg.c:245
 #, c-format
 msgid ""
 "Type: %s\n"
@@ -1217,24 +1228,24 @@ msgstr ""
 "النّوع: %s\n"
 "عُدّل في: %s"
 
-#: ../src/gtk/fm-progress-dlg.c:343
+#: ../src/gtk/fm-progress-dlg.c:344
 #, fuzzy
 msgid "<b>Errors occurred before file operation was stopped.</b>"
 msgstr "<b>حدثت أخطاء قبل توقّف عمليّة الملفّات.</b>"
 
-#: ../src/gtk/fm-progress-dlg.c:345
+#: ../src/gtk/fm-progress-dlg.c:346
 msgid "Cancelled"
 msgstr "أُلغيت"
 
-#: ../src/gtk/fm-progress-dlg.c:349
+#: ../src/gtk/fm-progress-dlg.c:350
 msgid "<b>The file operation was completed with errors.</b>"
 msgstr "<b>عمليّة الملفّات انتهت بأخطاء.</b>"
 
-#: ../src/gtk/fm-progress-dlg.c:351
+#: ../src/gtk/fm-progress-dlg.c:352
 msgid "Finished"
 msgstr "انتهت"
 
-#: ../src/gtk/fm-progress-dlg.c:373
+#: ../src/gtk/fm-progress-dlg.c:374
 msgid ""
 "Some files cannot be moved to trash can because the underlying file systems "
 "don't support this operation.\n"
@@ -1244,85 +1255,85 @@ msgstr ""
 "العمليّة.\n"
 "أتريد حذفها بدل ذلك؟"
 
-#: ../src/gtk/fm-progress-dlg.c:414 ../src/gtk/fm-progress-dlg.c:563
+#: ../src/gtk/fm-progress-dlg.c:415 ../src/gtk/fm-progress-dlg.c:564
 msgid "_Pause"
 msgstr "ألب_ث"
 
-#: ../src/gtk/fm-progress-dlg.c:422
+#: ../src/gtk/fm-progress-dlg.c:423
 msgid "_Resume"
 msgstr "است_كمل"
 
-#: ../src/gtk/fm-progress-dlg.c:597
+#: ../src/gtk/fm-progress-dlg.c:598
 msgid ", "
 msgstr "، "
 
 #. translators: it is part of "Moving files:" or "Moving xxx.txt"
-#: ../src/gtk/fm-progress-dlg.c:617
+#: ../src/gtk/fm-progress-dlg.c:618
 msgid "Moving"
 msgstr "ينقل"
 
 #. translators: it is part of "Copying files:" or "Copying xxx.txt"
-#: ../src/gtk/fm-progress-dlg.c:621
+#: ../src/gtk/fm-progress-dlg.c:622
 msgid "Copying"
 msgstr "ينسخ"
 
 #. translators: it is part of "Trashing files:" or "Trashing xxx.txt"
-#: ../src/gtk/fm-progress-dlg.c:625
+#: ../src/gtk/fm-progress-dlg.c:626
 msgid "Trashing"
 msgstr "يرمي"
 
 #. translators: it is part of "Deleting files:" or "Deleting xxx.txt"
-#: ../src/gtk/fm-progress-dlg.c:629
+#: ../src/gtk/fm-progress-dlg.c:630
 msgid "Deleting"
 msgstr "يحذف"
 
 #. translators: it is part of "Creating link /path/xxx.txt"
-#: ../src/gtk/fm-progress-dlg.c:633
+#: ../src/gtk/fm-progress-dlg.c:634
 msgid "Creating link"
 msgstr "ينشئ الوصلة"
 
 #. translators: 'In:' string is followed by destination folder path
-#: ../src/gtk/fm-progress-dlg.c:635
+#: ../src/gtk/fm-progress-dlg.c:636
 #, fuzzy
 msgid "<b>In:</b>"
 msgstr "<b>إلى:</b>"
 
-#: ../src/gtk/fm-progress-dlg.c:636
+#: ../src/gtk/fm-progress-dlg.c:637
 msgid "Creating links to files"
 msgstr "ينشئ الوصلات إلى الملفّات"
 
 #. translators: it is part of "Changing attributes of xxx.txt"
-#: ../src/gtk/fm-progress-dlg.c:643
+#: ../src/gtk/fm-progress-dlg.c:644
 msgid "Changing attributes of"
 msgstr "يغيّر خاصيّات"
 
-#: ../src/gtk/fm-progress-dlg.c:644
+#: ../src/gtk/fm-progress-dlg.c:645
 msgid "Changing attributes of files"
 msgstr "يغيّر خاصيّات الملفّات"
 
 #. translators: it is part of "Restoring files:" or "Restoring xxx.txt"
-#: ../src/gtk/fm-progress-dlg.c:650
+#: ../src/gtk/fm-progress-dlg.c:651
 msgid "Restoring"
 msgstr "يستعيد"
 
 #. note to translators: resulting string is such as "Deleting files"
-#: ../src/gtk/fm-progress-dlg.c:660
+#: ../src/gtk/fm-progress-dlg.c:661
 #, c-format
 msgid "%s files"
 msgstr "%s الملفّات"
 
-#: ../src/gtk/fm-progress-dlg.c:663
+#: ../src/gtk/fm-progress-dlg.c:664
 msgid "<b>File operation is in progress...</b>"
 msgstr "<b>عمليّة الملفّات تتقدّم...</b>"
 
 #. note to translators: resulting string is such as "Deleting file"
-#: ../src/gtk/fm-progress-dlg.c:669
+#: ../src/gtk/fm-progress-dlg.c:670
 #, c-format
 msgid "<b>%s file:</b>"
 msgstr "<b>%s الملفّ:</b>"
 
 #. note to translators: resulting string is such as "Deleting files"
-#: ../src/gtk/fm-progress-dlg.c:672
+#: ../src/gtk/fm-progress-dlg.c:673
 #, c-format
 msgid "<b>%s files:</b>"
 msgstr "<b>%s الملفّات:</b>"
@@ -1351,45 +1362,45 @@ msgstr "الأماكن"
 msgid "Directory Tree"
 msgstr "شجرة الأدلّة"
 
-#: ../src/gtk/fm-standard-view.c:255
+#: ../src/gtk/fm-standard-view.c:265
 msgid "View of folder contents"
 msgstr "اعرض محتويات المجلّد"
 
-#: ../src/gtk/fm-standard-view.c:818
+#: ../src/gtk/fm-standard-view.c:830
 #, c-format
 msgid "_Hide %s"
 msgstr "أ_خفِ %s"
 
-#: ../src/gtk/fm-standard-view.c:826
+#: ../src/gtk/fm-standard-view.c:838
 msgid "_Move Left"
 msgstr "انقل للي_سار"
 
-#: ../src/gtk/fm-standard-view.c:832
+#: ../src/gtk/fm-standard-view.c:844
 msgid "Move _Right"
 msgstr "انقل للي_مين"
 
-#: ../src/gtk/fm-standard-view.c:855
+#: ../src/gtk/fm-standard-view.c:867
 #, c-format
 msgid "Show %s"
 msgstr "أظهر %s"
 
-#: ../src/gtk/fm-standard-view.c:867
+#: ../src/gtk/fm-standard-view.c:879
 msgid "_Forget Width"
 msgstr "ان_سَ العرض"
 
-#: ../src/gtk/fm-standard-view.c:1859
+#: ../src/gtk/fm-standard-view.c:1876
 msgid "_Icon View"
 msgstr "منظور أي_قونات"
 
-#: ../src/gtk/fm-standard-view.c:1860
+#: ../src/gtk/fm-standard-view.c:1877
 msgid "_Compact View"
 msgstr "منظور م_دمج"
 
-#: ../src/gtk/fm-standard-view.c:1861
+#: ../src/gtk/fm-standard-view.c:1878
 msgid "_Thumbnail View"
 msgstr "منظور م_صغّرات"
 
-#: ../src/gtk/fm-standard-view.c:1862
+#: ../src/gtk/fm-standard-view.c:1879
 msgid "Detailed _List View"
 msgstr "منظور قائمة م_فصّلة"
 
@@ -1562,10 +1573,6 @@ msgstr "نتائج البحث"
 #: ../src/modules/gtk-fileprop-x-desktop.c:66
 msgid "Choose Executable File"
 msgstr "اختر الملفّ التّنفيذيّ"
-
-#: ../src/modules/gtk-fileprop-x-desktop.c:72
-msgid "Executable files"
-msgstr "الملفّات التّنفيذيّة"
 
 #: ../src/modules/gtk-fileprop-x-desktop.c:267
 msgid "<b>Co_mmand:</b>"
@@ -1785,6 +1792,12 @@ msgstr "قرص MRW/W"
 #: ../src/udisks/g-udisks-device.c:60
 msgid "Blank MRW/W Disc"
 msgstr "قرص MRW/W فارغ"
+
+#: ../src/udisks/g-udisks-device.c:278
+#, fuzzy
+#| msgid "_Audio files"
+msgid "Audio CD"
+msgstr "ملفّات صو_تيّة"
 
 #: ../src/udisks/g-udisks-device.c:299
 msgid "Blank Optical Disc"
