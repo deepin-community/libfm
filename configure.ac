@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.63])
-AC_INIT([libfm], [1.3.2], [http://pcmanfm.sourceforge.net/])
+AC_INIT([libfm], [1.4.0], [http://pcmanfm.sourceforge.net/])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects no-dist-gzip dist-xz -Wno-portability])
 AC_CONFIG_MACRO_DIR(m4)
 AC_CONFIG_HEADERS([config.h])
@@ -42,10 +42,10 @@ AM_COND_IF(EXTRALIB_ONLY,
     [enable_actions=no])
 if test x"$enable_actions" = xyes; then
     dnl no vala compiler required when sources are from dist tarball
-    if test -f src/actions/libfmactions_la_vala.stamp; then
+    if test -f $srcdir/src/actions/libfmactions_la_vala.stamp; then
         AM_PROG_VALAC
     else
-        AM_PROG_VALAC([0.13.0])
+        AM_PROG_VALAC([0.13])
         if test x"$VALAC" = xvalac; then
             AC_ERROR([No Vala compiler found but it is required.])
         fi
@@ -135,6 +135,9 @@ else
   LIBFM_GTK_PC=
   ac_with_gtk="none"
   LIBFM_PREF_APPS=
+fi
+if test "$ac_with_gtk" = "3.0"; then
+  CFLAGS="$CFLAGS -Wno-deprecated-declarations"
 fi
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)

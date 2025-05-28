@@ -4,6 +4,7 @@
  *      Copyright 2009 PCMan <pcman.tw@gmail.com>
  *      Copyright 2009 Juergen Hoetzel <juergen@archlinux.org>
  *      Copyright 2012-2014 Andriy Grytsenko (LStranger) <andrej@rep.kiev.ua>
+ *      Copyright 2024 Ingo Brückl
  *
  *      This file is a part of the Libfm library.
  *
@@ -45,6 +46,7 @@ typedef struct _FmConfig            FmConfig;
 typedef struct _FmConfigClass       FmConfigClass;
 
 #define     FM_CONFIG_DEFAULT_SINGLE_CLICK      FALSE
+#define     FM_CONFIG_DEFAULT_MIDDLE_CLICK      FALSE
 #define     FM_CONFIG_DEFAULT_USE_TRASH         TRUE
 #define     FM_CONFIG_DEFAULT_CONFIRM_DEL       TRUE
 #define     FM_CONFIG_DEFAULT_CONFIRM_TRASH     TRUE
@@ -60,6 +62,7 @@ typedef struct _FmConfigClass       FmConfigClass;
 #define     FM_CONFIG_DEFAULT_THUMBNAIL_MAX     2048
 
 #define     FM_CONFIG_DEFAULT_FORCE_S_NOTIFY    TRUE
+#define     FM_CONFIG_DEFAULT_DATE_ISO_8601     FALSE
 #define     FM_CONFIG_DEFAULT_BACKUP_HIDDEN     TRUE
 #define     FM_CONFIG_DEFAULT_NO_EXPAND_EMPTY   FALSE
 #define     FM_CONFIG_DEFAULT_SHOW_FULL_NAMES   FALSE
@@ -113,6 +116,7 @@ typedef enum
  * @auto_selection_delay: (since 1.2.0) delay for autoselection in single-click mode, in ms
  * @drop_default_action: (since 1.2.0) default action on drop (see #FmDndDestDropAction)
  * @single_click: single click to open file
+ * @middle_click: (since 1.4.0) middle click to open file
  * @use_trash: delete file to trash can
  * @confirm_del: ask before deleting files
  * @confirm_trash: (since 1.2.0) ask before moving files to trash can
@@ -122,6 +126,7 @@ typedef enum
  * @si_unit: use SI prefix for file sizes
  * @advanced_mode: enable advanced features for experienced user
  * @force_startup_notify: (since 1.0.1) use startup notify by default
+ * @date_iso_8601: (since 1.4.0) show date in ISO 8601 format instead of current locale format
  * @backup_as_hidden: (since 1.0.1) treat backup files as hidden
  * @no_usb_trash: (since 1.0.1) don't create trash folder on removable media
  * @no_child_non_expandable: (since 1.0.1) hide expanders on empty folder
@@ -207,10 +212,18 @@ struct _FmConfig
 
     gboolean smart_desktop_autodrop;
     gchar *saved_search;
+    union
+    {
+        gboolean date_iso_8601;
+        gpointer _reserved1;    /*< private >*/
+    };
+    union
+    {
+        gboolean middle_click;
+        gpointer _reserved2;    /*< private >*/
+    };
     /*< private >*/
-    gpointer _reserved1; /* reserved space for updates until next ABI */
-    gpointer _reserved2;
-    gpointer _reserved3;
+    gpointer _reserved3; /* reserved space for updates until next ABI */
     gpointer _reserved4;
     gpointer _reserved5;
     gpointer _reserved6;

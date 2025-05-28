@@ -4,6 +4,7 @@
  *      Copyright 2010 Hong Jen Yee (PCMan) <pcman.tw@gmail.com>
  *      Copyright 2012-2015 Andriy Grytsenko (LStranger) <andrej@rep.kiev.ua>
  *      Copyright 2020 wb9688 <wb9688@users.noreply.github.com>
+ *      Copyright 2024 Ingo Brückl
  *
  *      This file is a part of the Libfm library.
  *
@@ -215,6 +216,7 @@ static char* expand_exec_macros(GAppInfo* app, const char* full_desktop_path,
 
 struct ChildSetup
 {
+    char* display;
     char* sn_id;
     pid_t pgid;
 };
@@ -222,6 +224,8 @@ struct ChildSetup
 static void child_setup(gpointer user_data)
 {
     struct ChildSetup* data = (struct ChildSetup*)user_data;
+    if(data->display && !g_getenv("WAYLAND_DISPLAY"))
+        g_setenv ("DISPLAY", data->display, TRUE);
     if(data->sn_id)
         g_setenv ("DESKTOP_STARTUP_ID", data->sn_id, TRUE);
     /* Move child to grandparent group so it will not die with parent */
@@ -256,8 +260,10 @@ static char* expand_terminal(char* cmd, gboolean keep_open, GError** error)
     }
     if(keep_open && term->noclose_arg)
         opts = term->noclose_arg;
-    else
+    else if(term->open_arg)
         opts = term->open_arg;
+    else
+        opts = "";
     if(term->custom_args)
         ret = g_strdup_printf("%s %s %s %s", term->program, term->custom_args,
                               opts, cmd);
@@ -338,6 +344,7 @@ static gboolean do_launch(GAppInfo* appinfo, const char* full_desktop_path,
             }
             else
                 use_sn = FALSE;
+            data.display = g_app_launch_context_get_display(ctx, appinfo, gfiles);
 
             if(use_sn)
                 data.sn_id = g_app_launch_context_get_startup_notify_id(ctx, appinfo, gfiles);
@@ -345,8 +352,10 @@ static gboolean do_launch(GAppInfo* appinfo, const char* full_desktop_path,
                 data.sn_id = NULL;
         }
         else
+        {
+            data.display = NULL;
             data.sn_id = NULL;
-
+        }
         g_debug("sn_id = %s", data.sn_id);
 
         if(G_LIKELY(kf))
@@ -367,6 +376,7 @@ static gboolean do_launch(GAppInfo* appinfo, const char* full_desktop_path,
             g_app_launch_context_launch_failed(ctx, data.sn_id);
 
         g_free(path);
+        g_free(data.display);
         g_free(data.sn_id);
 
         g_strfreev(argv);
