@@ -1,3 +1,9 @@
+libfm (1.4.0-2deepin1) unstable; urgency=medium
+
+  * Revert t64.
+
+ -- xiangzelong <xiangzelong@deepin.org>  Thu, 29 May 2025 09:54:22 +0800
+
 libfm (1.4.0-2) unstable; urgency=medium
 
   * debian/control: libfm4t64 depends on shared-mime-info.
